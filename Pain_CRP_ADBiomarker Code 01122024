@@ -1,0 +1,249 @@
+
+require(OpenMx)   #Loads OpenMx
+require(psych)   #Loads Psych package
+
+library(devtools)
+library(umx)
+library (OpenMx)
+library (haven)
+library (dplyr)
+library(car)
+library(psych)
+library(lme4)
+library(nlme)
+library(lmerTest)
+library(ggplot2)
+library(tidyverse)
+library(lme4)
+library(car)
+library(multilevelTools)
+source("GenEpiHelperFunctions.R")
+source("polychoricMeansMatrix3.R")
+library(haven)
+#install.packages("JWileyMisc")
+library(JWileymisc)
+library(effects)
+#install.packages("sjPlot")
+library(sjPlot)
+#install.packages("sjmisc")
+library(sjmisc)
+library(sjPlot)
+library(lme4)
+library(ggplot2)
+library("bestNormalize")
+library("table1")
+
+
+library(devtools)
+library(umx)
+library (OpenMx)
+library (haven)
+library (dplyr)
+library(car)
+library(psych)
+library(lme4)
+library(nlme)
+library(lmerTest)
+library(ggplot2)
+library(tidyverse)
+library(lme4)
+library(car)
+library(multilevelTools)
+library(haven)
+library(JWileymisc)
+library(effects)
+library(sjPlot)
+library(sjmisc)
+library(splines)
+source("C:/Users/trbell/Documents/OpenMx Workshop 2023/GenEpiHelperFunctions.R")
+source("C:/Users/trbell/Documents/OpenMx Workshop 2023polychoricMeansMatrix3.R")
+
+
+#READ IN DATA; 
+setwd("Z:/Tyler/Tyler Master VETSA File/")
+
+VETSA <- read_sav("Tyler Bell_VETSA_Master_Data_05232023.sav")
+
+# PULL FROM MASTER DATA. 
+names(VETSA)
+names(VETSA)<- toupper(names(VETSA))
+library(lme4)
+
+# Model 1
+model1 <- lmer(RESIDUAL_AB4240 ~ CPMS_INTEN_V3 + SQRTCRP_V3 + AGE_V3 + CHARLSON_V3 + OPIOIDMED_CAT + CPMS_INTEN_V3:SQRTCRP_V3 + (1 | CASE), data = VETSA, REML = FALSE, control = lmerControl(optimizer="bobyqa"))
+summary(model1)
+
+tab_model(model1, p.val = "kr", show.df = TRUE)
+
+# Model 2
+model2 <- lmer(ZLOG_RESIDUALS_AB42_MEAN ~ CPMS_INTEN_V3 + SQRTCRP_V3 + AGE_V3 + CHARLSON_V3 + OPIOIDMED_CAT + CPMS_INTEN_V3:SQRTCRP_V3 + (1 | CASE), data = VETSA, REML = FALSE, control = lmerControl(optimizer="bobyqa"))
+summary(model2)
+
+tab_model(model2, p.val = "kr", show.df = TRUE)
+
+model2.fig<-ggplot(VETSA, aes(x = as.factor(CP_CRP_V3), y = ZLOG_RESIDUALS_AB42_MEAN)) +
+  geom_boxplot() +
+  labs(title = "Box Plot of ZLOG_RESIDUALS_AB42_MEAN_WS by CP_CRP_V3",
+       x = "CP_CRP_V3",
+       y = "ZLOG_RESIDUALS_AB42_MEAN_WS")
+
+# Model 3
+model3 <- lmer(ZLOG_RESIDUALS_AB40_MEAN_WS ~ CPMS_INTEN_V3 + SQRTCRP_V3 + AGE_V3 + CHARLSON_V3 + OPIOIDMED_CAT + CPMS_INTEN_V3:SQRTCRP_V3 + (1 | CASE), data = VETSA, REML = FALSE, control = lmerControl(optimizer="bobyqa"))
+summary(model3)
+
+tab_model(model3, p.val = "kr", show.df = TRUE)
+
+model3.fig<-ggplot(VETSA, aes(x = as.factor(CP_CRP_V3), y = ZLOG_RESIDUALS_AB40_MEAN)) +
+  geom_boxplot() +
+  labs(title = "Box Plot of ZLOG_RESIDUALS_AB40_MEAN_WS by CP_CRP_V3",
+       x = "CP_CRP_V3",
+       y = "ZLOG_RESIDUALS_AB40_MEAN_WS")
+
+# Model 4
+model4 <- lmer(ZLOG_RESIDUALS_TAU_MEAN_WS ~ CPMS_INTEN_V3 + SQRTCRP_V3 + AGE_V3 + CHARLSON_V3 + OPIOIDMED_CAT + CPMS_INTEN_V3:SQRTCRP_V3 + (1 | CASE), data = VETSA, REML = FALSE, control = lmerControl(optimizer="bobyqa"))
+summary(model4)
+
+tab_model(model4, p.val = "kr", show.df = TRUE)
+
+model3.fig<-ggplot(VETSA, aes(x = as.factor(CP_CRP_V3), y = ZLOG_RESIDUALS_TAU_MEAN)) +
+  geom_boxplot() +
+  labs(title = "Box Plot of ZLOG_RESIDUALS_TAU_MEAN_WS by CP_CRP_V3",
+       x = "CP_CRP_V3",
+       y = "ZLOG_RESIDUALS_TAU_MEAN_WS")
+
+# Model 5
+model5 <- lmer(ZLOG_RESIDUALS_NFL_MEAN_WS ~CPMS_INTEN_V3 + SQRTCRP_V3 + AGE_V3 + CHARLSON_V3 + OPIOIDMED_CAT + CPMS_INTEN_V3:SQRTCRP_V3 + (1 | CASE), data = VETSA, REML = FALSE, control = lmerControl(optimizer="bobyqa"))
+summary(model5)
+
+tab_model(model5, p.val = "kr", show.df = TRUE)
+
+model5.fig<-ggplot(VETSA, aes(x = as.factor(CP_CRP_V3), y = ZLOG_RESIDUALS_NFL_MEAN_WS)) +
+  geom_boxplot() +
+  labs(title = "Box Plot of ZLOG_RESIDUALS_NFL_MEAN_WS by CP_CRP_V3",
+       x = "CP_CRP_V3",
+       y = "ZLOG_RESIDUALS_NFL_MEAN_WS")
+VETSA
+
+# Assuming 'VETSA' is your original dataset
+VETSA$STROK_V3
+# Subset conditions
+VETSA.hip <- VETSA[VETSA$STROK_V3 != 1 & VETSA$QUAL_HIPPOCAMPUS_V3C == 0, ]
+
+
+VETSA.hip$CPMS_INTEN_V3<-as.factor(VETSA.hip$CPMS_INTEN_V3)
+# Model 6
+model6 <- lmer(ZHIPPOCAMPUS_ADJ ~ZSQRTCRP_V3_WS + WNW + CHARLSON_V3 + OPIOIDMEDV3 + ZLOG_RESIDUALS_AB40_MEAN_WS + 
+                
+               + ZSQRTCRP_V3_WS*ZLOG_RESIDUALS_AB40_MEAN_WS + (1 | CASE), data = VETSA.hip, REML = FALSE, control = lmerControl(optimizer="bobyqa"))
+summary(model6)
+
+
+model6 <- lmer(ZHIPPOCAMPUS_ADJ ~ZSQRTCRP_V3_WS + WNW + CHARLSON_V3 + OPIOIDMEDV3 + ZLOG_RESIDUALS_AB42_MEAN_WS + 
+                 
+                 + ZSQRTCRP_V3_WS*ZLOG_RESIDUALS_AB42_MEAN_WS + (1 | CASE), data = VETSA.hip, REML = FALSE, control = lmerControl(optimizer="bobyqa"))
+summary(model6)
+
+tab_model(model6, p.val = "kr", show.df = TRUE)
+
+model6_fig <- ggplot(VETSA.hip, aes(x = ZLOG_RESIDUALS_AB42_MEAN_WS, y = scale(ZHIPPOCAMPUS_ADJ_WS))) +
+  geom_point(aes(color = as.factor(CPMS_INTEN_V3), shape = as.factor(CPMS_INTEN_V3))) +
+  geom_smooth(aes(color = as.factor(CRP_CAT_V3), linetype = as.factor(CRP_CAT_V3)), method = "lm", se = TRUE, fullrange = TRUE, size = 1.5) +
+  labs(x = "AB42 (z-score)",
+       y = "Hippocampal Volume (z-score)",
+       color = "CPMS_INTEN_V3",
+       shape = "CPMS_INTEN_V3",
+       linetype = "CRP_CAT_V3") +
+  theme_minimal() +
+  theme(text = element_text(size = 16))
+
+model6_fig
+
+
+
+
+model7 <- lmer(ZHIPPOCAMPUS_ADJ ~ZSQRTCRP_V3_WS + WNW + CHARLSON_V3 + OPIOIDMEDV3 + ZLOG_RESIDUALS_AB40_MEAN_WS + 
+                 
+                 + ZSQRTCRP_V3_WS*ZLOG_RESIDUALS_AB40_MEAN_WS + (1 | CASE), data = VETSA.hip, REML = FALSE, control = lmerControl(optimizer="bobyqa"))
+summary(model7)
+
+tab_model(model7, p.val = "kr", show.df = TRUE)
+
+model7_fig <- ggplot(VETSA.hip, aes(x = ZLOG_RESIDUALS_AB40_MEAN_WS, y = scale(ZHIPPOCAMPUS_ADJ_WS))) +
+  geom_point(aes(color = as.factor(CPMS_INTEN_V3), shape = as.factor(CPMS_INTEN_V3))) +
+  geom_smooth(aes(color = as.factor(CRP_CAT_V3), linetype = as.factor(CRP_CAT_V3)), method = "lm", se = TRUE, fullrange = TRUE, size = 1.5) +
+  labs(x = "AB40 (z-score)",
+       y = "Hippocampal Volume (z-score)",
+       color = "CPMS_INTEN_V3",
+       shape = "CPMS_INTEN_V3",
+       linetype = "CRP_CAT_V3") +
+  theme_minimal() +
+  theme(text = element_text(size = 16))
+
+model7_fig
+
+
+
+
+model8 <- lmer(ZHIPPOCAMPUS_ADJ ~ZSQRTCRP_V3 + WNW + CHARLSON_V3 + OPIOIDMEDV3 + ZLOG_RESIDUALS_TAU_MEAN_WS + 
+                 
+                 + ZSQRTCRP_V3*ZLOG_RESIDUALS_TAU_MEAN_WS + (1 | CASE), data = VETSA.hip, REML = FALSE, control = lmerControl(optimizer="bobyqa"))
+summary(model8)
+
+tab_model(model8, p.val = "kr", show.df = TRUE)
+
+model8_fig <- ggplot(VETSA.hip, aes(x = ZLOG_RESIDUALS_TAU_MEAN_WS, y = scale(ZHIPPOCAMPUS_ADJ_WS))) +
+  geom_point(aes(color = as.factor(CPMS_INTEN_V3), shape = as.factor(CPMS_INTEN_V3))) +
+  geom_smooth(aes(color = as.factor(CRP_CAT_V3), linetype = as.factor(CRP_CAT_V3)), method = "lm", se = TRUE, fullrange = TRUE, size = 1.5) +
+  labs(x = "t-tau (z-score)",
+       y = "Hippocampal Volume (z-score)",
+       color = "CPMS_INTEN_V3",
+       shape = "CPMS_INTEN_V3",
+       linetype = "CRP_CAT_V3") +
+  theme_minimal() +
+  theme(text = element_text(size = 16))
+
+model8_fig
+
+
+
+model9 <- lmer(ZHIPPOCAMPUS_ADJ ~ZSQRTCRP_V3 + WNW + CHARLSON_V3 + OPIOIDMEDV3 + ZLOG_RESIDUALS_NFL_MEAN_WS + 
+                 
+                 + ZSQRTCRP_V3*ZLOG_RESIDUALS_NFL_MEAN_WS + (1 | CASE), data = VETSA.hip, REML = FALSE, control = lmerControl(optimizer="bobyqa"))
+summary(model9)
+
+tab_model(model9, p.val = "kr", show.df = TRUE)
+
+model9_fig <- ggplot(VETSA.hip, aes(x = ZLOG_RESIDUALS_NFL_MEAN_WS, y = scale(ZHIPPOCAMPUS_ADJ_WS))) +
+  geom_point(aes(color = as.factor(CPMS_INTEN_V3), shape = as.factor(CPMS_INTEN_V3))) +
+  geom_smooth(aes(color = as.factor(CRP_CAT_V3), linetype = as.factor(CRP_CAT_V3)), method = "lm", se = TRUE, fullrange = TRUE, size = 1.5) +
+  labs(x = "NfL (z-score)",
+       y = "Hippocampal Volume (z-score)",
+       color = "CPMS_INTEN_V3",
+       shape = "CPMS_INTEN_V3",
+       linetype = "CRP_CAT_V3") +
+  theme_minimal() +
+  theme(text = element_text(size = 16))
+
+model9_fig
+
+
+
+model10 <- lmer(ZHIPPOCAMPUS_ADJ ~ZSQRTCRP_V3 + WNW + CHARLSON_V3 + OPIOIDMEDV3 + RESIDUAL_AB4240 + 
+                 
+                 + ZSQRTCRP_V3*RESIDUAL_AB4240 + (1 | CASE), data = VETSA.hip, REML = FALSE, control = lmerControl(optimizer="bobyqa"))
+summary(model10)
+
+tab_model(model10, p.val = "kr", show.df = TRUE)
+
+model10_fig <- ggplot(VETSA.hip, aes(x = RESIDUAL_AB4240, y = scale(ZHIPPOCAMPUS_ADJ_WS))) +
+  geom_point(aes(color = as.factor(CPMS_INTEN_V3), shape = as.factor(CPMS_INTEN_V3))) +
+  geom_smooth(aes(color = as.factor(CRP_CAT_V3), linetype = as.factor(CRP_CAT_V3)), method = "lm", se = TRUE, fullrange = TRUE, size = 1.5) +
+  labs(x = "AB42/AB40 (z-score)",
+       y = "Hippocampal Volume (z-score)",
+       color = "CPMS_INTEN_V3",
+       shape = "CPMS_INTEN_V3",
+       linetype = "CRP_CAT_V3") +
+  theme_minimal() +
+  theme(text = element_text(size = 16))
+
+model10_fig
