@@ -81,7 +81,7 @@ summary(model2)
 
 tab_model(model2, p.val = "kr", show.df = TRUE)
 
-model2.fig<-ggplot(VETSA, aes(x = as.factor(CP_CRP_V3), y = ZLOG_RESIDUALS_AB42_MEAN)) +
+model2.fig<-ggplot(VETSA, aes(x = as.factor(CP_CRP_V3_R), y = ZLOG_RESIDUALS_AB42_MEAN)) +
   geom_boxplot() +
   labs(title = "Box Plot of ZLOG_RESIDUALS_AB42_MEAN_WS by CP_CRP_V3",
        x = "CP_CRP_V3",
@@ -109,7 +109,7 @@ summary(model3)
 
 tab_model(model3, p.val = "kr", show.df = TRUE)
 
-model3.fig<-ggplot(VETSA, aes(x = as.factor(CP_CRP_V3), y = ZLOG_RESIDUALS_AB40_MEAN)) +
+model3.fig<-ggplot(VETSA, aes(x = as.factor(CP_CRP_V3_R), y = ZLOG_RESIDUALS_AB40_MEAN)) +
   geom_boxplot() +
   labs(title = "Box Plot of ZLOG_RESIDUALS_AB40_MEAN_WS by CP_CRP_V3",
        x = "CP_CRP_V3",
@@ -135,7 +135,7 @@ summary(model4)
 
 tab_model(model4, p.val = "kr", show.df = TRUE)
 
-model4.fig<-ggplot(VETSA, aes(x = as.factor(CP_CRP_V3), y = ZLOG_RESIDUALS_TAU_MEAN)) +
+model4.fig<-ggplot(VETSA, aes(x = as.factor(CP_CRP_V3_R), y = ZLOG_RESIDUALS_TAU_MEAN)) +
   geom_boxplot() +
   labs(title = "Box Plot of ZLOG_RESIDUALS_TAU_MEAN_WS by CP_CRP_V3",
        x = "CP_CRP_V3",
@@ -160,8 +160,8 @@ model5 <- lmer(ZLOG_RESIDUALS_NFL_MEAN_WS ~CPMS_INTEN_V3 + SQRTCRP_V3 + AGE_V3 +
 summary(model5)
 
 tab_model(model5, p.val = "kr", show.df = TRUE)
-
-model5.fig<-ggplot(VETSA, aes(x = as.factor(CP_CRP_V3), y = ZLOG_RESIDUALS_NFL_MEAN_WS)) +
+VETSA$CP_CRP_V3_R
+model5.fig<-ggplot(VETSA, aes(x = as.factor(CP_CRP_V3_R), y = ZLOG_RESIDUALS_NFL_MEAN_WS)) +
   geom_boxplot() +
   labs(title = "Box Plot of ZLOG_RESIDUALS_NFL_MEAN_WS by CP_CRP_V3",
        x = "CP_CRP_V3",
